@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import generateId from "../helpers/generateId.js";
 
 const signUp = async (req, res) => {
   // avoid duplicate registers
@@ -12,6 +13,7 @@ const signUp = async (req, res) => {
 
   try {
     const user = new User(req.body);
+    user.token = generateId();
     const savedUser = await user.save();
     res.json(savedUser);
   } catch (e) {
