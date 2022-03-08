@@ -123,4 +123,17 @@ const newPassword = async (req, res) => {
   }
 };
 
-export { signUp, auth, confirm, resetPassword, validateToken, newPassword };
+const profile = async (req, res) => {
+  const { user } = req;
+  res.json(user);
+};
+
+export {
+  signUp,
+  auth,
+  confirm,
+  resetPassword,
+  validateToken,
+  newPassword,
+  profile,
+};
