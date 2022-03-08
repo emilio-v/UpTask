@@ -71,4 +71,56 @@ const confirm = async (req, res) => {
   }
 };
 
-export { signUp, auth, confirm };
+const resetPassword = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    const error = new Error("User does not exists");
+    return res.status(400).json({ msg: error.message });
+  }
+
+  try {
+    user.token = generateId();
+    await user.save();
+    res.json({ msg: "We have sent you an email with the steps to follow" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const validateToken = async (req, res) => {
+  const { token } = req.params;
+  const validToken = await User.findOne({ token });
+
+  if (validToken) {
+    res.json({ msg: "Valid Token. The User exists" });
+  } else {
+    const error = new Error("Invalid Token");
+    return res.status(404).json({ msg: error.message });
+  }
+};
+
+const newPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  const user = await User.findOne({ token });
+
+  if (user) {
+    user.password = password;
+    user.token = "";
+    try {
+      await user.save();
+      res.json({ msg: "Password modified successfully" });
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    const error = new Error("Invalid Token");
+    return res.status(404).json({ msg: error.message });
+  }
+};
+
+export { signUp, auth, confirm, resetPassword, validateToken, newPassword };
