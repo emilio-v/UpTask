@@ -12,7 +12,10 @@ const newProject = async (req, res) => {
   }
 };
 
-const getProjects = async (req, res) => {};
+const getProjects = async (req, res) => {
+  const projects = await Project.find().where("creator").equals(req.user);
+  res.json(projects);
+};
 
 const getProject = async (req, res) => {};
 
