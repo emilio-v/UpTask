@@ -78,7 +78,35 @@ const editProject = async (req, res) => {
   }
 };
 
-const deleteProject = async (req, res) => {};
+const deleteProject = async (req, res) => {
+  const { id } = req.params;
+
+  const checkId = mongoose.Types.ObjectId.isValid(id);
+
+  if (!checkId) {
+    const error = new Error("Project not found");
+    return res.status(404).json({ msg: error.message });
+  }
+
+  const project = await Project.findById(id);
+
+  if (!project) {
+    const error = new Error("Project not found");
+    return res.status(404).json({ msg: error.message });
+  }
+
+  if (project.creator.toString() !== req.user._id.toString()) {
+    const error = new Error("Invalid action");
+    return res.status(401).json({ msg: error.message });
+  }
+
+  try {
+    await project.deleteOne();
+    res.json({ msg: "Deleted project" });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const addCollaborator = async (req, res) => {};
 
