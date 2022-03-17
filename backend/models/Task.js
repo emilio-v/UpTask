@@ -16,11 +16,6 @@ const taskSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    name: {
-      type: String,
-      trim: true,
-      required: true,
-    },
     deliveryDate: {
       type: Date,
       required: true,
