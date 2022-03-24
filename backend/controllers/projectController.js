@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Project from "../models/Project.js";
+import Task from "../models/Task.js";
 
 const newProject = async (req, res) => {
   const project = new Project(req.body);
@@ -40,7 +41,12 @@ const getProject = async (req, res) => {
     return res.status(401).json({ msg: error.message });
   }
 
-  res.json(project);
+  const tasks = await Task.find().where("project").equals(project._id);
+
+  res.json({
+    project,
+    tasks,
+  });
 };
 
 const editProject = async (req, res) => {
@@ -112,8 +118,6 @@ const addCollaborator = async (req, res) => {};
 
 const deleteCollaborator = async (req, res) => {};
 
-const getTasks = async (req, res) => {};
-
 export {
   newProject,
   getProjects,
@@ -122,5 +126,4 @@ export {
   deleteProject,
   addCollaborator,
   deleteCollaborator,
-  getTasks,
 };
