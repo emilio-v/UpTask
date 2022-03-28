@@ -1,7 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const SignUp = () => {
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const { name, email, password, confirmPassword } = user;
+
+  const onChage = (e) => {
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   return (
     <>
       <h1 className="text-sky-600 font-black text-6xl capitalize">
@@ -20,8 +36,11 @@ const SignUp = () => {
           <input
             id="name"
             type="text"
+            name="name"
             placeholder="Name"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            value={name}
+            onChange={onChage}
           />
         </div>
         <div className="my-5">
@@ -34,8 +53,11 @@ const SignUp = () => {
           <input
             id="email"
             type="email"
+            name="email"
             placeholder="Email"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            value={email}
+            onChange={onChage}
           />
         </div>
         <div className="my-5">
@@ -48,8 +70,11 @@ const SignUp = () => {
           <input
             id="password"
             type="password"
+            name="password"
             placeholder="Password"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            value={password}
+            onChange={onChage}
           />
         </div>
         <div className="my-5">
@@ -62,8 +87,11 @@ const SignUp = () => {
           <input
             id="confirm-password"
             type="password"
+            name="confirmPassword"
             placeholder="Confirm your Password"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            value={confirmPassword}
+            onChange={onChage}
           />
         </div>
         <input
