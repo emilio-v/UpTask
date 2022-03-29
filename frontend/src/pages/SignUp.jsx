@@ -9,7 +9,10 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
-  const [alert, setAlert] = useState({});
+  const [alert, setAlert] = useState({
+    msg: "",
+    error: false,
+  });
 
   const { name, email, password, confirmPassword } = user;
 
@@ -30,6 +33,22 @@ const SignUp = () => {
       });
       return;
     }
+
+    if (password !== confirmPassword) {
+      setAlert({
+        msg: "Passwords are not equals",
+        error: true,
+      });
+    }
+
+    if (password.length < 8) {
+      setAlert({
+        msg: "Make sure you have at least 8 characters",
+        error: true,
+      });
+    }
+
+    setAlert({ msg: "", error: false });
   };
 
   return (
