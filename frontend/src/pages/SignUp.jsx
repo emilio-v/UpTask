@@ -1,7 +1,75 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Alert from "../components/Alert";
+import axios from "axios";
 
 const SignUp = () => {
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [alert, setAlert] = useState({
+    msg: "",
+    error: false,
+  });
+
+  const { name, email, password, confirmPassword } = user;
+
+  const onChage = (e) => {
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const submit = async (e) => {
+    e.preventDefault();
+
+    if ([name, email, password, confirmPassword].includes("")) {
+      setAlert({
+        msg: "All fields are required",
+        error: true,
+      });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setAlert({
+        msg: "Passwords are not equals",
+        error: true,
+      });
+    }
+
+    if (password.length < 8) {
+      setAlert({
+        msg: "Make sure you have at least 8 characters",
+        error: true,
+      });
+    }
+
+    setAlert({ msg: "", error: false });
+
+    try {
+      const { data } = await axios.post("http://localhost:4000/api/users", {
+        name,
+        email,
+        password,
+      });
+      setAlert({
+        msg: data.msg,
+        error: false,
+      });
+    } catch (error) {
+      const { data } = error.response;
+      setAlert({
+        msg: data.msg,
+        error: true,
+      });
+    }
+  };
+
   return (
     <>
       <h1 className="text-sky-600 font-black text-6xl capitalize">
@@ -9,7 +77,9 @@ const SignUp = () => {
         <span className="text-slate-700">projects</span>
       </h1>
 
-      <form className="my-10 bg-white shadow rounded-lg p-10">
+      {alert.msg && <Alert alert={alert} />}
+
+      <form onSubmit={submit} className="my-10 bg-white shadow rounded-lg p-10">
         <div className="my-5">
           <label
             className="uppercase text-gray-600 block text-xl font-bold"
@@ -20,8 +90,11 @@ const SignUp = () => {
           <input
             id="name"
             type="text"
+            name="name"
             placeholder="Name"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            value={name}
+            onChange={onChage}
           />
         </div>
         <div className="my-5">
@@ -34,8 +107,11 @@ const SignUp = () => {
           <input
             id="email"
             type="email"
+            name="email"
             placeholder="Email"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            value={email}
+            onChange={onChage}
           />
         </div>
         <div className="my-5">
@@ -48,8 +124,11 @@ const SignUp = () => {
           <input
             id="password"
             type="password"
+            name="password"
             placeholder="Password"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            value={password}
+            onChange={onChage}
           />
         </div>
         <div className="my-5">
@@ -62,8 +141,11 @@ const SignUp = () => {
           <input
             id="confirm-password"
             type="password"
+            name="confirmPassword"
             placeholder="Confirm your Password"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            value={confirmPassword}
+            onChange={onChage}
           />
         </div>
         <input
