@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Alert from "../components/Alert";
+import axios from "axios";
 
 const SignUp = () => {
   const [user, setUser] = useState({
@@ -23,7 +24,7 @@ const SignUp = () => {
     });
   };
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
 
     if ([name, email, password, confirmPassword].includes("")) {
@@ -49,6 +50,17 @@ const SignUp = () => {
     }
 
     setAlert({ msg: "", error: false });
+
+    try {
+      const response = await axios.post("http://localhost:4000/api/users", {
+        name,
+        email,
+        password,
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
