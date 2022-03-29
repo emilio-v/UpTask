@@ -16,7 +16,9 @@ const signUp = async (req, res) => {
     const user = new User(req.body);
     user.token = generateId();
     await user.save();
-    res.json({ msg: "User created successfully" });
+    res.json({
+      msg: "User created successfully. Check you email to confim your account",
+    });
   } catch (e) {
     console.log(e);
   }
