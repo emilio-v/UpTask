@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Alert from "../components/Alert";
 
 const SignUp = () => {
   const [user, setUser] = useState({
@@ -8,6 +9,7 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
+  const [alert, setAlert] = useState({});
 
   const { name, email, password, confirmPassword } = user;
 
@@ -18,6 +20,18 @@ const SignUp = () => {
     });
   };
 
+  const submit = (e) => {
+    e.preventDefault();
+
+    if ([name, email, password, confirmPassword].includes("")) {
+      setAlert({
+        msg: "All fields are required",
+        error: true,
+      });
+      return;
+    }
+  };
+
   return (
     <>
       <h1 className="text-sky-600 font-black text-6xl capitalize">
@@ -25,7 +39,9 @@ const SignUp = () => {
         <span className="text-slate-700">projects</span>
       </h1>
 
-      <form className="my-10 bg-white shadow rounded-lg p-10">
+      {alert.msg && <Alert alert={alert} />}
+
+      <form onSubmit={submit} className="my-10 bg-white shadow rounded-lg p-10">
         <div className="my-5">
           <label
             className="uppercase text-gray-600 block text-xl font-bold"
