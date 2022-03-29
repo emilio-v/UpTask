@@ -52,14 +52,21 @@ const SignUp = () => {
     setAlert({ msg: "", error: false });
 
     try {
-      const response = await axios.post("http://localhost:4000/api/users", {
+      const { data } = await axios.post("http://localhost:4000/api/users", {
         name,
         email,
         password,
       });
-      console.log(response);
+      setAlert({
+        msg: data.msg,
+        error: false,
+      });
     } catch (error) {
-      console.log(error);
+      const { data } = error.response;
+      setAlert({
+        msg: data.msg,
+        error: true,
+      });
     }
   };
 
