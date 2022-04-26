@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Alert from "../components/Alert";
 import axiosClient from "../config/axiosClient";
+import useAuth from "../hooks/useAuth";
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -12,6 +13,8 @@ const Login = () => {
     msg: "",
     error: false,
   });
+
+  // const { setAuth } = useAuth();
 
   const { email, password } = user;
 
