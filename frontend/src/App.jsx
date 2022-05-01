@@ -9,6 +9,9 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ConfirmAccount from "./pages/ConfirmAccount";
 
+import ProtectedRoute from "./layouts/ProtectedRoute";
+import Projects from "./pages/Projects";
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -20,6 +23,10 @@ const App = () => {
             <Route path="forgot-password" element={<ForgotPassword />} />
             <Route path="forgot-password/:token" element={<ResetPassword />} />
             <Route path="confirm/:token" element={<ConfirmAccount />} />
+          </Route>
+
+          <Route path="/projects" element={<ProtectedRoute />}>
+            <Route index element={<Projects />} />
           </Route>
         </Routes>
       </AuthProvider>

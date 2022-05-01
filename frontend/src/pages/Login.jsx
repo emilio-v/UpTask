@@ -14,7 +14,7 @@ const Login = () => {
     error: false,
   });
 
-  // const { setAuth } = useAuth();
+  const { setAuth } = useAuth();
 
   const { email, password } = user;
 
@@ -50,6 +50,8 @@ const Login = () => {
         password: "",
       });
       localStorage.setItem("token", data.token);
+      setAuth(data);
+      window.location.reload();
     } catch (error) {
       const { data } = error.response;
       setAlert({
