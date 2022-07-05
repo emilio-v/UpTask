@@ -59,6 +59,8 @@ const ProjectsProvider = ({ children }) => {
 
       const { data } = await axiosClient.post("/projects", project, config);
 
+      setProjects([...projects, data]);
+
       setAlert({
         error: false,
         msg: "Project created successfully",

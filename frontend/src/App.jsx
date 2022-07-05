@@ -13,6 +13,7 @@ import ConfirmAccount from "./pages/ConfirmAccount";
 import ProtectedRoute from "./layouts/ProtectedRoute";
 import Projects from "./pages/Projects";
 import NewProject from "./pages/NewProject";
+import Project from "./pages/Project";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
             <Route path="/projects" element={<ProtectedRoute />}>
               <Route index element={<Projects />} />
               <Route path="new-project" element={<NewProject />} />
+              <Route path=":id" element={<Project />} />
             </Route>
           </Routes>
         </ProjectsProvider>
