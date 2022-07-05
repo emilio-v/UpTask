@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Alert from "../components/Alert";
-import axios from "axios";
+import axiosClient from "../config/axiosClient";
 
 const SignUp = () => {
   const [user, setUser] = useState({
@@ -52,7 +52,7 @@ const SignUp = () => {
     setAlert({ msg: "", error: false });
 
     try {
-      const { data } = await axios.post("http://localhost:4000/api/users", {
+      const { data } = await axiosClient.post("/users", {
         name,
         email,
         password,
@@ -60,6 +60,12 @@ const SignUp = () => {
       setAlert({
         msg: data.msg,
         error: false,
+      });
+      setUser({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
       });
     } catch (error) {
       const { data } = error.response;
