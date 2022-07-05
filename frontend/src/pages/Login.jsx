@@ -1,14 +1,75 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Alert from "../components/Alert";
+import axiosClient from "../config/axiosClient";
+import useAuth from "../hooks/useAuth";
 
 const Login = () => {
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
+  const [alert, setAlert] = useState({
+    msg: "",
+    error: false,
+  });
+
+  const { setAuth } = useAuth();
+
+  const { email, password } = user;
+
+  const onChange = (e) => {
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const submit = async (e) => {
+    e.preventDefault();
+
+    if ([email, password].includes("")) {
+      setAlert({
+        msg: "All fields are required",
+        error: true,
+      });
+      return;
+    }
+
+    try {
+      const { data } = await axiosClient.post("/users/login", {
+        email,
+        password,
+      });
+      setAlert({
+        msg: data.msg,
+        error: false,
+      });
+      setUser({
+        email: "",
+        password: "",
+      });
+      localStorage.setItem("token", data.token);
+      setAuth(data);
+      window.location.reload();
+    } catch (error) {
+      const { data } = error.response;
+      setAlert({
+        msg: data.msg,
+        error: true,
+      });
+    }
+  };
+
   return (
     <>
       <h1 className="text-sky-600 font-black text-6xl capitalize">
         Login and manage your <span className="text-slate-700">projects</span>
       </h1>
 
-      <form className="my-10 bg-white shadow rounded-lg p-10">
+      {alert.msg && <Alert alert={alert} />}
+
+      <form className="my-10 bg-white shadow rounded-lg p-10" onSubmit={submit}>
         <div className="my-5">
           <label
             className="uppercase text-gray-600 block text-xl font-bold"
@@ -20,6 +81,9 @@ const Login = () => {
             id="email"
             type="email"
             placeholder="Email"
+            name="email"
+            value={email}
+            onChange={onChange}
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
           />
         </div>
@@ -34,6 +98,9 @@ const Login = () => {
             id="password"
             type="password"
             placeholder="Password"
+            name="password"
+            value={password}
+            onChange={onChange}
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
           />
         </div>
